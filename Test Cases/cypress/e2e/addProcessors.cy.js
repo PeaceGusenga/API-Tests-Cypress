@@ -1,35 +1,44 @@
+import { EndpointLocators } from "../../../Test Data/endpooints";
+import { Payloads } from "../../../Test Data/payload";
+
+var endpoint = new EndpointLocators()
+var payload  = new Payloads()
+
 describe('Test /AddProcessors endpoint', () => {
   
  
-  it('Add a new processor', () => {
+  it('POST payload & Verify Status 200 & Response Body', () => {
+   /*
     const payload1 = {
       processorID: '1',
       processorName: 'Test Processor',
     };
-
+*/
     cy.request({
       method: 'POST',
-      url: 'https://localhost:5002/AddProcessor',
-      body: payload1,
+      url: endpoint.addProcessorEndpoint,
+      body: payload.validProcessorPayload,
       failOnStatusCode: false
     }).then((response) => {
       expect(response.status).to.equal(200);
+      expect(response.body).to.equal('New process added.');
     });
   });
 
-  it('Handle invalid processor', () => {
+  it('POST invalid payload & Verify Status 400 & Verify Reponse Body', () => {
+    /*
     const payload1 = {
       processorID: '8',
       processorName: 'Invalid Processor ',
     };
-
+*/
     cy.request({
       method: 'POST',
-      url: 'https://localhost:5002/AddProcessor',
+      url: endpoint.addProcessorEndpoint,
       headers: {
         'Content-Type': 'application/json'
       },
-      body: payload1,
+      body: payload.invalidProcessorPayload,
       failOnStatusCode: false
     }).then((response) => {
       expect(response.status).to.equal(400);
@@ -37,16 +46,17 @@ describe('Test /AddProcessors endpoint', () => {
     });
   });
 
-  it('API Bug Found!', () => {
+  it('BUG - POST Payload Containing Edge Case & Verify Status 200', () => {
+    /*
     const payload1 = {
       processorID: '-100',
       processorName: ' ',
     };
-
+*/
     cy.request({
       method: 'POST',
-      url: 'https://localhost:5002/AddProcessor',
-      body: payload1,
+      url: endpoint.addProcessorEndpoint,
+      body: payload.bugProcessorPayload,
       failOnStatusCode: false
     }).then((response) => {
       expect(response.status).to.equal(200);

@@ -1,33 +1,35 @@
+import { EndpointLocators } from "../../../Test Data/endpooints";
+import { Payloads } from "../../../Test Data/payload";
+
+var endpoint = new EndpointLocators()
+var payload = new Payloads()
+
 describe('Test /GetAllSmartphones endpoint', () => {
   
-    it('should verify the response status code', () => {
-      cy.request('GET', '/GetAllSmartphones')
+    it('Call Endpoint & Verify Status 200', () => {
+      cy.request('GET', endpoint.getAllSmartphonesEndpoint)
         .then((response) => {
           expect(response.status).to.equal(200);
         });
     });
-  
-    it('should verify a specific response', () => {
-      cy.request('GET', '/GetAllSmartphones')
+
+    it('Verify Object Structure for Multiple Results', () => {
+      cy.request('GET', endpoint.getAllProcessorsEndpoint)
+        .then((response) => {
+          expect(response.status).to.equal(200);
+          
+          response.body.forEach((result) => {
+            expect(result).to.have.all.keys(payload.validProcessKeys);
+          });
+        });
+    });
+    
+    it('Verify That Reponse Contains Specifc Entry', () => {
+      cy.request('GET', endpoint.getAllSmartphonesEndpoint)
         .then((response) => {
           expect(response.status).to.equal(200);
           expect(response.body).to.deep.include.members([
-            {
-              modelID: 'OPP_FIND_V46',
-              modelName: 'OPP_FIND_V46',
-              specID: '1',
-              brandID: '3',
-              price: '$215',
-              brandName: 'Oppo',
-              brandNetWorth: '$140000000',
-              storageSpace: '128 GB',
-              memory: '4 GB',
-              batterySize: '4500 mAh',
-              processorID: '1',
-              numberOfCameras: '1',
-              hasWirelessCharging: 'No',
-              processorName: 'Snapdragon 710',
-            },
+          payload.randomSmartphone,
           ]);
         });
     });

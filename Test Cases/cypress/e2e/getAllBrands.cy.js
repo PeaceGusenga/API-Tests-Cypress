@@ -1,14 +1,18 @@
+import { EndpointLocators } from "../../../Test Data/endpooints";
+
+var endpoint = new EndpointLocators()
+
 describe('Test /GetAllBrands endpoint', () => {
      
-    it('Verify the Status Code', () => {
-      cy.request('GET', 'https://localhost:5002/GetAllBrands')
+    it('Call Endpoint & Verify Status 200', () => {
+      cy.request('GET', endpoint.getallBrandsEndpoint)
         .then((response) => {
           expect(response.status).to.equal(200);
         });
     });
   
-    it('Verify The Response Body', () => {
-      cy.request('GET', 'https://localhost:5002/GetAllBrands')
+    it('Verify Correct Response Body Structure', () => {
+      cy.request('GET', endpoint.getallBrandsEndpoint)
       .then((response) => {
         expect(response.status).to.equal(200);
         expect(response.body).to.satisfy((body) => {
@@ -22,8 +26,8 @@ describe('Test /GetAllBrands endpoint', () => {
     });
   });    
 
-    it('Empty response body', () => {
-      cy.request('GET', 'https://localhost:5002/GetAllBrands')
+    it('Check Whether Response Body Is Empty', () => {
+      cy.request('GET', endpoint.getallBrandsEndpoint)
         .then((response) => {
           expect(response.status).to.equal(200);
           expect(response.body).to.deep.equal([]);
